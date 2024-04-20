@@ -1,64 +1,83 @@
-
-#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-struct Stack
+#include <limits.h>
+struct stack
 {
+    int size;
     int top;
-    unsigned capacity;
     int *array;
 };
-
-struct Stack *createStack(unsigned capacity)
+struct stack *creation(int size)
 {
-    struct Stack *stack = (struct Stack *)malloc(sizeof(struct Stack));
-    stack->capacity = capacity;
-    stack->top = -1;
-    stack->array = (int *)malloc(stack->capacity * sizeof(int));
-    return stack;
+    struct stack *s = (struct stack *)malloc(sizeof(struct stack));
+    s->top = -1;
+    s->size = size;
+    s->array = (int *)malloc(sizeof(int) * size);
+    return s;
 }
-
-int isFull(struct Stack *stack)
+void display(struct stack *s)
 {
-    return stack->top == stack->capacity - 1;
+    int i;
+    if (isEmpty(s))
+    {
+        printf("The stack is empty\n");
+    }
+    else
+    {
+        printf("Elements in the stack: \n");
+        for (i = s->top; i >= 0; i--)
+        {
+            printf("%d\n", s->array[i]);
+        }
+    }
 }
-
-int isEmpty(struct Stack *stack)
+int isEmpty(struct stack *s)
 {
-    return stack->top == -1;
+    int Empty = (s->top == -1);
+
+    return Empty;
 }
-
-void push(struct Stack *stack, int item)
+int isFull(struct stack *s)
 {
-    if (isFull(stack))
+    int Full = (s->top == s->size - 1);
+    return Full;
+}
+void push(struct stack *s, int element)
+{
+    if (isFull(s))
+    {
         return;
-    stack->array[++stack->top] = item;
-    printf("%d pushed to stack\n", item);
+    }
+    int index = ++s->top;
+    s->array[index] = element;
+    printf("\n%d pushed into the stack\n", element);
+    display(s);
 }
-
-int pop(struct Stack *stack)
+int pop(struct stack *s)
 {
-    if (isEmpty(stack))
+    if (isEmpty(s))
+    {
         return INT_MIN;
-    return stack->array[stack->top--];
+    }
+    int index = s->top--;
+    return s->array[index];
 }
-
-int peek(struct Stack *stack)
+int peek(struct stack *s)
 {
-    if (isEmpty(stack))
+    if (isEmpty(s))
+    {
         return INT_MIN;
-    return stack->array[stack->top];
+    }
+    int index = s->top;
+    return s->array[index];
 }
-int main()
+void main()
 {
-    struct Stack *stack = createStack(100);
-
-    push(stack, 10);
-    push(stack, 20);
-    push(stack, 30);
-
-    printf("%d popped from stack\n", pop(stack));
-
-    return 0;
+    struct stack *s = creation(50);
+    push(s, 100);
+    push(s, 200);
+    push(s, 300);
+    pop(s);
+    printf("\nAfter pop operation, elements in the stack: \n");
+    display(s);
 }
