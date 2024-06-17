@@ -1,83 +1,74 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
-struct stack
+
+typedef struct stack
 {
-    int size;
     int top;
+    unsigned int capacity;
     int *array;
-};
-struct stack *creation(int size)
+} __attribute__((__packed__));
+
+struct stack *createstack(unsigned int capacity)
 {
-    struct stack *s = (struct stack *)malloc(sizeof(struct stack));
-    s->top = -1;
-    s->size = size;
-    s->array = (int *)malloc(sizeof(int) * size);
-    return s;
+    struct stack *stack = (struct stack *)malloc(sizeof(struct stack));
+    stack->capacity = capacity;
+    stack->top = -1;
+    stack->array = (int *)malloc(stack->capacity * sizeof(int));
+    return stack;
 }
-void display(struct stack *s)
+
+int isFull(struct stack *stack)
 {
-    int i;
-    if (isEmpty(s))
+    return stack->top == stack->capacity - 1;
+}
+
+int isEmpty(struct stack *stack)
+{
+    return stack->top == -1;
+}
+
+void push(struct stack *stack, int value)
+{
+    if (isFull(stack))
     {
-        printf("The stack is empty\n");
+        printf("Stack is full, cannot push\n");
     }
+
     else
     {
-        printf("Elements in the stack: \n");
-        for (i = s->top; i >= 0; i--)
-        {
-            printf("%d\n", s->array[i]);
-        }
+        stack->array[++stack->top] = value;
+        printf("The value being pushed in the stack is :- %d\n", value);
     }
 }
-int isEmpty(struct stack *s)
-{
-    int Empty = (s->top == -1);
 
-    return Empty;
-}
-int isFull(struct stack *s)
+int pop(struct stack *stack)
 {
-    int Full = (s->top == s->size - 1);
-    return Full;
-}
-void push(struct stack *s, int element)
-{
-    if (isFull(s))
-    {
-        return;
-    }
-    int index = ++s->top;
-    s->array[index] = element;
-    printf("\n%d pushed into the stack\n", element);
-    display(s);
-}
-int pop(struct stack *s)
-{
-    if (isEmpty(s))
+    if (isEmpty(stack))
     {
         return INT_MIN;
     }
-    int index = s->top--;
-    return s->array[index];
+    return (stack->array[stack->top--]);
 }
-int peek(struct stack *s)
+
+int peek(struct stack *stack)
 {
-    if (isEmpty(s))
+    if (isEmpty(stack))
     {
         return INT_MIN;
     }
-    int index = s->top;
-    return s->array[index];
+    return stack->array[stack->top];
 }
-void main()
+
+int main()
 {
-    struct stack *s = creation(50);
-    push(s, 100);
-    push(s, 200);
-    push(s, 300);
-    pop(s);
-    printf("\nAfter pop operation, elements in the stack: \n");
-    display(s);
+    struct stack *stack = createstack(100);
+
+    push(stack, 10);
+    push(stack, 20);
+    push(stack, 30);
+
+    printf("%d popped from stack\n", pop(stack));
+
+    return 0;
 }
