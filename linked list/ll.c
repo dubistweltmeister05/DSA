@@ -57,19 +57,84 @@ void InsertAtEnd(struct node *head, int element)
     printLL(head);
 }
 
+void InsertAtIndex(struct node *head, int index, int element)
+{
+    int count = 0;
+    struct node *a;
+    a = allocate;
+    a->data = element;
+    struct node *temp;
+    temp = head;
+
+    while (count != index - 1)
+    {
+        count++;
+        temp = temp->next;
+    }
+    a->next = temp->next;
+    temp->next = a;
+
+    printf("\nAfter adding another node at the index %d \n", index);
+    printLL(head);
+}
+
+void DeleteAtIndex(struct node *head, int n)
+{
+    struct node *temp = head;
+    struct node *temp1 = allocate;
+
+    if (n == 1)
+    {
+        head = temp->next;
+        free(temp);
+    }
+    else
+    {
+        for (int i = 0; i < n - 2; i++)
+        {
+            temp = temp->next;
+            temp1 = temp->next;
+            temp->next = temp1->next;
+            free(temp1);
+        }
+    }
+    printf("\nAfter deleting the node at index %d \n", n);
+    printLL(head);
+}
+
+struct node *Reverse(struct node *head)
+{
+    struct node *current = head;
+    struct node *prev = NULL;
+    struct node *next;
+
+    while (current != NULL)
+    {
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+    }
+    head = prev;
+    return head;
+}
+
+void reverseprint(struct node *head)
+{
+    if (head == NULL)
+        return;
+    reverseprint(head->next);
+    printf("\n%d\n", head->data);
+}
 int main()
 {
-    struct node *head;
+    struct node *head, *first, *second, *third, *fourth;
+
     head = new (head);
-    struct node *first;
     first = new (first);
-    struct node *second;
     second = new (second);
-    struct node *third;
     third = new (third);
-    struct node *fourth;
     fourth = new (fourth);
-    struct node *last;
 
     head->data = 1;
     head->next = first;
@@ -85,8 +150,12 @@ int main()
 
     fourth->data = 5;
     fourth->next = NULL;
-    printf("Before adding another node at the head\n");
+    printf("\nBefore reversing\n");
     printLL(head);
-    InsertAtEnd(head, 69);
+    // head = Reverse(head);
+
+    printf("\nafter reversal\n");
+    reverseprint(head);
+    // printLL(head);
     return 0;
 }

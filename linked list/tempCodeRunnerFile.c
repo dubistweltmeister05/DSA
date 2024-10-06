@@ -1,1 +1,3 @@
-    // printf("After adding another node at the head\n");
+urth;
+
+    fourth->data = 5
