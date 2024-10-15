@@ -24,15 +24,18 @@ void printLL(struct node *head)
     printLL(temp->next);
 }
 
-void rev_printLL(struct node *head)
+void reverse_PrintLL(struct node *head)
 {
-
-    struct node *p = head;
-    if (p == NULL)
+    struct node *temp = head;
+    if (temp == NULL)
+    {
         return;
-    rev_printLL(p->next);
-    printf("%d \n", p->data);
+    }
+
+    reverse_PrintLL(temp->next);
+    printf("%d\n", temp->data);
 }
+
 int main()
 {
     struct node *head, *first, *second, *third, *fourth;
@@ -61,6 +64,6 @@ int main()
     printLL(head);
 
     printf("\n reverse Print \n");
-    rev_printLL(head);
+    reverse_PrintLL(head);
     return 0;
 }
