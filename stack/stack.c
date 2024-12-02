@@ -2,73 +2,50 @@
 #include <stdlib.h>
 #include <limits.h>
 
-typedef struct stack
-{
-    int top;
-    unsigned int capacity;
-    int *array;
-} __attribute__((__packed__));
+#define MAX_SIZE 101
+int a[MAX_SIZE];
+int top = -1;
 
-struct stack *createstack(unsigned int capacity)
+void push(int num)
 {
-    struct stack *stack = (struct stack *)malloc(sizeof(struct stack));
-    stack->capacity = capacity;
-    stack->top = -1;
-    stack->array = (int *)malloc(stack->capacity * sizeof(int));
-    return stack;
-}
-
-int isFull(struct stack *stack)
-{
-    return stack->top == stack->capacity - 1;
-}
-
-int isEmpty(struct stack *stack)
-{
-    return stack->top == -1;
-}
-
-void push(struct stack *stack, int value)
-{
-    if (isFull(stack))
+    if (top == MAX_SIZE)
     {
-        printf("Stack is full, cannot push\n");
+        printf("the stack is full mate\n");
+        return;
     }
+    a[++top] = num;
+}
 
-    else
+void pop()
+{
+    if (top == -1)
     {
-        stack->array[++stack->top] = value;
-        printf("The value being pushed in the stack is :- %d\n", value);
+        printf("the stack is empty\n");
+        return;
+    }
+    top--;
+}
+
+int Top()
+{
+    return a[top];
+}
+
+void prints()
+{
+    printf("\n Stack \n");
+    for (int i = 0; i <= top; i++)
+    {
+        printf("%d\n", a[i]);
     }
 }
-
-int pop(struct stack *stack)
-{
-    if (isEmpty(stack))
-    {
-        return INT_MIN;
-    }
-    return (stack->array[stack->top--]);
-}
-
-int peek(struct stack *stack)
-{
-    if (isEmpty(stack))
-    {
-        return INT_MIN;
-    }
-    return stack->array[stack->top];
-}
-
 int main()
 {
-    struct stack *stack = createstack(100);
-
-    push(stack, 10);
-    push(stack, 20);
-    push(stack, 30);
-
-    printf("%d popped from stack\n", pop(stack));
-
-    return 0;
+    push(6);
+    push(69);
+    push(32);
+    push(21);
+    pop();
+    push(99);
+    prints();
 }
